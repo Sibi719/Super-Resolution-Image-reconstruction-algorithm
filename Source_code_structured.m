@@ -4,7 +4,7 @@ close all;
 N=512;
 wo=N/2;
 d1=1*10^-6;
-NoiseLevel=5;
+NoiseLevel=10;
 lambda=637*10^-9;
 x=(-N/2:N/2-1)*d1;
 y=(-N/2:N/2-1)*d1;
@@ -15,10 +15,12 @@ u=(-N/2:N/2-1)*df;
 v=(-N/2:N/2-1)*df;
 [U,V]=meshgrid(u,v);
 RR=sqrt(U.^2 + V.^2);
-% I = imread('testpat.tiff');
-% I = I(257:768,257:768);
-% I = double(I);
-I=imread('Lena.png');
+noiseCF=1.05;
+
+I = imread('testpat.tiff');
+I = I(257:768,257:768);
+I = double(I);
+I=imread('dog.jpg');
 I=rgb2gray(I);
 I=double(I);
 figure
@@ -33,7 +35,7 @@ set(gcf, 'PaperPositionMode', 'auto');
 saveas(gcf,"1.png");
 
 figure
-imagesc(log(abs(fftshift(fft2(I)))));
+imagesc(u,v,log(abs(fftshift(fft2(I)))));
 colorbar
 colormap(gray);
 axis on
@@ -88,7 +90,7 @@ fftemp = fftshift(fft2(ILt1p1));
 figure
 hold on
 plot(u,abs(Otf(wo+1,:)),'--','LineWidth',2,'MarkerSize',6)
-plot(u,0.5*abs(fftemp(wo+1,:))./max(max(abs(fftemp))),'r--','LineWidth',2,'MarkerSize',6)
+plot(u,abs(fftemp(wo+1,:))./max(max(abs(fftemp))),'r--','LineWidth',2,'MarkerSize',6)
 legend('OTFo','illumination spectrum')
 grid on
 box on
@@ -107,7 +109,7 @@ set(gcf, 'PaperPositionMode', 'auto');
 saveas(gcf,"7.png");
 
 figure
-mesh(log(abs(fftshift(fft2(Im)))));
+mesh(U,V,log(abs(fftshift(fft2(Im)))));
 colorbar
 colormap(gray);
 axis on
@@ -115,200 +117,20 @@ title(['Fourier transform of Image with uinform illumination']);
 set(gcf, 'PaperPositionMode', 'auto');
 saveas(gcf,"8.png");
 
-% 
-% figure
-% imagesc(x*10^3,y*10^3,IA1);
-% colorbar
-% colormap(gray);
-% xlabel('x(mm)') ;
-% ylabel('y(mm)');
-% axis on
-% title(['IA1']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"9.png");
-% 
-% figure
-% imagesc(log(abs(fftshift(fft2(IA1)))));
-% colorbar
-% colormap(gray);
-% axis on
-% title(['Fourier transform of IA1']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"10.png");
-% 
-% figure
-% imagesc(x*10^3,y*10^3,IA2);
-% colorbar
-% colormap(gray);
-% xlabel('x(mm)') ;
-% ylabel('y(mm)');
-% axis on
-% title(['IA2']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"11.png");
-% 
-% figure
-% imagesc(log(abs(fftshift(fft2(IA2)))));
-% colorbar
-% colormap(gray);
-% axis on
-% title(['Fourier transform of IA2']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"12.png");
-% 
-% figure
-% imagesc(x*10^3,y*10^3,IA3);
-% colorbar
-% colormap(gray);
-% xlabel('x(mm)') ;
-% ylabel('y(mm)');
-% axis on
-% title(['IA3']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"13.png");
-% 
-% figure
-% imagesc(log(abs(fftshift(fft2(IA3)))));
-% colorbar
-% colormap(gray);
-% axis on
-% title(['Fourier transform of IA3']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"14.png");
-% 
-% 
-% figure
-% imagesc(x*10^3,y*10^3,IB1);
-% colorbar
-% colormap(gray);
-% xlabel('x(mm)') ;
-% ylabel('y(mm)');
-% axis on
-% title(['IB1']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"15.png");
-% 
-% figure
-% imagesc(log(abs(fftshift(fft2(IB1)))));
-% colorbar
-% colormap(gray);
-% axis on
-% title(['Fourier transform of IB1']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"16.png");
-% 
-% figure
-% imagesc(x*10^3,y*10^3,IB2);
-% colorbar
-% colormap(gray);
-% xlabel('x(mm)') ;
-% ylabel('y(mm)');
-% axis on
-% title(['IB2']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"17.png");
-% 
-% figure
-% imagesc(log(abs(fftshift(fft2(IB2)))));
-% colorbar
-% colormap(gray);
-% axis on
-% title(['Fourier transform of IB2']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"18.png");
-% 
-% figure
-% imagesc(x*10^3,y*10^3,IB3);
-% colorbar
-% colormap(gray);
-% xlabel('x(mm)') ;
-% ylabel('y(mm)');
-% axis on
-% title(['IB3']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"19.png");
-% 
-% figure
-% imagesc(log(abs(fftshift(fft2(IB3)))));
-% colorbar
-% colormap(gray);
-% axis on
-% title(['Fourier transform of IB3']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"20.png");
-% 
-% figure
-% imagesc(x*10^3,y*10^3,IC1);
-% colorbar
-% colormap(gray);
-% xlabel('x(mm)') ;
-% ylabel('y(mm)');
-% axis on
-% title(['IC1']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"21.png");
-% 
-% figure
-% imagesc(log(abs(fftshift(fft2(IC1)))));
-% colorbar
-% colormap(gray);
-% axis on
-% title(['Fourier transform of IC1']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"22.png");
-% 
-% figure
-% imagesc(x*10^3,y*10^3,IC2);
-% colorbar
-% colormap(gray);
-% xlabel('x(mm)') ;
-% ylabel('y(mm)');
-% axis on
-% title(['IC2']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"23.png");
-% 
-% figure
-% imagesc(log(abs(fftshift(fft2(IC2)))));
-% colorbar
-% colormap(gray);
-% axis on
-% title(['Fourier transform of IC2']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"24.png");
-% 
-% figure
-% imagesc(x*10^3,y*10^3,IC3);
-% colorbar
-% colormap(gray);
-% xlabel('x(mm)') ;
-% ylabel('y(mm)');
-% axis on
-% title(['IC3']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"25.png");
-% 
-% figure
-% imagesc(log(abs(fftshift(fft2(IC3)))));
-% colorbar
-% colormap(gray);
-% axis on
-% title(['Fourier transform of IC3']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"26.png");
-
 [Kotf,cindex] = OTFcutoff(Otf);
 psfe=psfforedgetaper(psf);
-% figure
-% imagesc(psfe);
-% colorbar
-% colormap(jet);
-% axis on
-% title(['PSF for edge tapering']);
-% set(gcf, 'PaperPositionMode', 'auto');
-% saveas(gcf,"27.png");
 
 Kotf=abs(u(cindex));
+
+K=sqrt(U.^2+V.^2);
+W=zeros(size(Otf,1),size(Otf,2));
+W=K>noiseCF*Kotf;
+W=double(W);
+
+figure
+imagesc(W);
+colormap(gray);colorbar
+
 
 [fvecA]= fvector_optimizer(IA1,IA2,IA3,Otf,psf,x,y,Kotf,U,V,u,v,X,Y);
 
@@ -322,107 +144,231 @@ fvecC=-fvecC;
 
 [AF1,AF2,AF3]=separate_noisyfcomponenets(IA1,IA2,IA3,fvecA,phaseA,psfe);
 
-% figure
-% imagesc(log(abs(AF1)));
-% title('S(k)H(k)');
-% colormap(gray)
-% 
-% figure
-% imagesc(log(abs(AF2)));
-% title('S(k-p_{\theta_1})H(k)');
-% colormap(gray)
-% 
-% figure
-% imagesc(log(abs(AF3)));
-% title('S(k+p_{\theta_1})H(k)');
-% colormap(gray)
-
 [BF1,BF2,BF3]=separate_noisyfcomponenets(IB1,IB2,IB3,fvecB,phaseB,psfe);
 
-% figure
-% imagesc(log(abs(BF1)));
-% title('S(k)H(k)');
-% colormap(gray)
-% 
-% figure
-% imagesc(log(abs(BF2)));
-% title('S(k-p_{\theta_2})H(k)');
-% colormap(gray)
-% 
-% figure
-% imagesc(log(abs(BF3)));
-% title('S(k+p_{\theta_2})H(k)');
-% colormap(gray)
-
-
 [CF1,CF2,CF3]=separate_noisyfcomponenets(IC1,IC2,IC3,fvecC,phaseC,psfe);
-
-% figure
-% imagesc(log(abs(CF1)));
-% title('S(k)H(k)');
-% colormap(gray)
-% 
-% figure
-% imagesc(log(abs(CF2)));
-% title('S(k-p_{\theta_3})H(k)');
-% colormap(gray)
-% 
-% figure
-% imagesc(log(abs(CF3)));
-% title('S(k+p_{\theta_3})H(k)');
-% colormap(gray)
 
 NoisySkHk=(AF1+BF1+CF1)./3;
 
 figure
-imagesc(log(abs(NoisySkHk)));
+imagesc(u,v,log(abs(NoisySkHk)));
 title('Noisy S(k)H(k)');
 colormap(gray)
 
-[A,alpha]=Object_Para_Estimation(NoisySkHk,Otf,Kotf,U,V);
+[A,alpha]=Object_Para_Estimation(NoisySkHk,Otf,Kotf,U,V,W);
 
-K=sqrt(U.^2+V.^2);
-Aobj = A;
-Bobj = -alpha;
-OBJo = Aobj*(K.^-Bobj);
-SIGp = OBJo.*Otf;
-pp = 3;
+
+Objamp = A.*(K.^-alpha);
+Sigamp = Objamp.*Otf;
+
 figure;
 hold on
-plot([0:512-1]-256,log(abs(NoisySkHk(256+pp,:))),'k--','LineWidth',3,'MarkerSize',6)
-plot([0:512-1]-256,log(abs(SIGp(256+pp,:))),'mo-','LineWidth',2,'MarkerSize',6)
+plot(u,log(abs(NoisySkHk(257+3,:))),'k--','LineWidth',3,'MarkerSize',6)
+plot(u,log(abs(Sigamp(257+3,:))),'mo-','LineWidth',2,'MarkerSize',6)
 legend('acutal signal power','avg. signal power')
 grid on
 box on
 
-function [Obj1,Obj2]=Object_Para_Estimation(NoisySkHk,Otf,Kotf,U,V)
+mA=Modulation_Estimation(AF2,U,V,fvecA,phaseA,Otf,Kotf,A,alpha,u,v,W);
+mB=Modulation_Estimation(BF2,U,V,fvecB,phaseB,Otf,Kotf,A,alpha,u,v,W);
+mC=Modulation_Estimation(CF2,U,V,fvecC,phaseC,Otf,Kotf,A,alpha,u,v,W);
+
+[WF_AF1,Noise_AF1]=Weiner_filter_center(AF1,U,V,A,alpha,Otf,Kotf,K,fvecA,phaseA,W);
+
+[WF_AF2,Noise_AF2]=Weiner_filter_right(AF2,U,V,A,alpha,Otf,Kotf,K,fvecA,mA,W,u,v,wo);
+shift_WF_AF2=ifft2((WF_AF2)).*exp(-1j*2*pi*(fvecA(1).*X + fvecA(2).*Y));
+shift_WF_AF2=(fft2(shift_WF_AF2));
+
+[WF_AF3,Noise_AF3]=Weiner_filter_left(AF3,U,V,A,alpha,Otf,Kotf,K,fvecA,mA,W,u,v,wo);
+shift_WF_AF3=ifft2((WF_AF3)).*exp(+1j*2*pi*(fvecA(1).*X + fvecA(2).*Y));
+shift_WF_AF3=(fft2(shift_WF_AF3));
+
+phase_cor=phasecorrection(WF_AF1,shift_WF_AF3,fvecA,U,V);
+shift_WF_AF2=shift_WF_AF2.*exp(-1j.*phase_cor);
+shift_WF_AF3=shift_WF_AF3.*exp(+1j.*phase_cor);
+
+%%B
+[WF_BF1,Noise_BF1]=Weiner_filter_center(BF1,U,V,A,alpha,Otf,Kotf,K,fvecB,phaseB,W);
+
+[WF_BF2,Noise_BF2]=Weiner_filter_right(BF2,U,V,A,alpha,Otf,Kotf,K,fvecB,mB,W,u,v,wo);
+shift_WF_BF2=ifft2((WF_BF2)).*exp(-1j*2*pi*(fvecB(1).*X + fvecB(2).*Y));
+shift_WF_BF2=(fft2(shift_WF_BF2));
+
+[WF_BF3,Noise_BF3]=Weiner_filter_left(BF3,U,V,A,alpha,Otf,Kotf,K,fvecB,mB,W,u,v,wo);
+shift_WF_BF3=ifft2((WF_BF3)).*exp(+1j*2*pi*(fvecB(1).*X + fvecB(2).*Y));
+shift_WF_BF3=(fft2(shift_WF_BF3));
+
+phase_cor=phasecorrection(WF_BF1,shift_WF_BF3,fvecB,U,V);
+shift_WF_BF2=shift_WF_BF2.*exp(-1j.*phase_cor);
+shift_WF_BF3=shift_WF_BF3.*exp(1j.*phase_cor);
+
+%%%C
+
+[WF_CF1,Noise_CF1]=Weiner_filter_center(CF1,U,V,A,alpha,Otf,Kotf,K,fvecC,phaseC,W);
+
+[WF_CF2,Noise_CF2]=Weiner_filter_right(CF2,U,V,A,alpha,Otf,Kotf,K,fvecC,mC,W,u,v,wo);
+shift_WF_CF2=ifft2((WF_CF2)).*exp(-1j*2*pi*(fvecC(1).*X + fvecC(2).*Y));
+shift_WF_CF2=(fft2(shift_WF_CF2));
+
+[WF_CF3,Noise_CF3]=Weiner_filter_left(CF3,U,V,A,alpha,Otf,Kotf,K,fvecC,mC,W,u,v,wo);
+shift_WF_CF3=ifft2((WF_CF3)).*exp(+1j*2*pi*(fvecC(1).*X + fvecC(2).*Y));
+shift_WF_CF3=(fft2(shift_WF_CF3));
+
+phase_cor=phasecorrection(WF_CF1,shift_WF_CF3,fvecC,U,V);
+shift_WF_CF2=shift_WF_CF2.*exp(-1j.*phase_cor);
+shift_WF_CF3=shift_WF_CF3.*exp(1j.*phase_cor);
+
+[SNRA1,SNRA2,SNRA3]= SNRfunc(WF_AF1,shift_WF_AF2,shift_WF_AF3,Noise_AF1,Noise_AF2,Noise_AF3,U,V,fvecA,A,alpha,Otf,u,v,mA);
+
+[SNRB1,SNRB2,SNRB3]= SNRfunc(WF_BF1,shift_WF_BF2,shift_WF_BF3,Noise_BF1,Noise_BF2,Noise_BF3,U,V,fvecB,A,alpha,Otf,u,v,mB);
+
+[SNRC1,SNRC2,SNRC3]= SNRfunc(WF_CF1,shift_WF_CF2,shift_WF_CF3,Noise_CF1,Noise_CF2,Noise_CF3,U,V,fvecC,A,alpha,Otf,u,v,mC);
+
+omega= SNRA1+SNRA2+SNRA3+SNRB1+SNRB2+SNRB3+SNRC1+SNRC2+SNRC3;
+w=eps;
+
+Fmerged_Num=SNRA1.*WF_AF1+SNRA2.*shift_WF_AF2+SNRA3.*shift_WF_AF3 + SNRB1.*WF_BF1+SNRB2.*shift_WF_BF2+SNRB3.*shift_WF_BF3+SNRC1.*WF_CF1+SNRC2.*shift_WF_CF2+SNRC3.*shift_WF_CF3;
+Fmerged_Den=w+omega;
+Fmerged=Fmerged_Num./Fmerged_Den;
+ figure
+imagesc(u,v,log(abs(Fmerged)));
+colormap(gray)
+Fmerged(isnan(Fmerged))=1;
+Fmerged(isinf(Fmerged))=1;
+
+SIMimage=real( ifft2(fftshift(Fmerged)));
+
+figure
+imagesc(x,y,(SIMimage));
+colormap(gray)
+
+figure
+imagesc(x,y,real(Im));
+colormap(gray)
+function[SNR1,SNR2,SNR3]= SNRfunc(FTcenter,FT2,FT3,N1,N2,N3,U,V,fvector,A,alpha,Otf,u,v,m)
+
+K=sqrt(U.^2+V.^2);
+k_plus_p=sqrt((U+fvector(1)).^2 + (V+fvector(2)).^2);
+k_minus_p=sqrt((U-fvector(1)).^2 + (V-fvector(2)).^2);
+
+OBJamp1=A.*abs(K).^(-alpha);
+OBJamp2=m.*A.*abs(k_minus_p).^(-alpha);
+OBJamp3=m.*A.*abs(k_plus_p).^(-alpha);
+
+Signamp1=OBJamp1.*Otf;
+Signamp2=OBJamp2.*Otf;
+Signamp3=OBJamp3.*Otf;
+
+[minValue,uclosestIndex] = min(abs(u-fvector(1)));
+[minValue,vclosestIndex] = min(abs(v-fvector(2)));
+up=uclosestIndex-257;
+vp=vclosestIndex-257;
+Signamp2=circshift(Signamp2,-up,2);
+Signamp2=circshift(Signamp2,-vp,1);
+
+Signamp3=circshift(Signamp3,up,2);
+Signamp3=circshift(Signamp3,vp,1);
+
+SNR1=Signamp1.*conj(Signamp1)./N1;
+SNR2=Signamp2.*conj(Signamp2)./N2;
+SNR3=Signamp3.*conj(Signamp3)./N3;
+end
+function phase_cor=phasecorrection(Fcenter,Fshifted,fvector,U,V)
+K=sqrt(U.^2+V.^2);
+shifted_K=sqrt((U-fvector(1)).^2 + (V-fvector(2)).^2);
+k_mag=sqrt(fvector(1)^2 + fvector(2)^2);
+Zmask = (K < 0.8*k_mag).*(shifted_K < 0.8*k_mag);
+phase_cor = angle( sum(sum( Fcenter.*conj(Fshifted).*Zmask)));
+end
+function [WF_FTobject,NoisePower]=Weiner_filter_left(FTobject,U,V,A,alpha,Otf,Kotf,K,fvector,m_est,W,u,v,wo)
+Noisespectrum=FTobject.*W;
+NoisePower = sum(sum(abs(Noisespectrum).^2))./sum(sum(W));
+Otfpower=abs(Otf).^2;
+K=sqrt(U.^2+V.^2);
+shifted_K=sqrt((U+fvector(1)).^2 + (V+fvector(2)).^2);
+k_mag=sqrt(fvector(1)^2 + fvector(2)^2);
+OBJamp = m_est.*A.*(shifted_K).^(-alpha);
+OBJpower= abs(OBJamp).^2;
+T1= (conj(Otf)./NoisePower);
+T2= Otfpower./NoisePower;
+T3= 1./OBJpower;
+Filter= T1./(T2+T3);
+WF_FTobject= Filter.*FTobject.*(1/m_est);
+end
+function [WF_FTobject,NoisePower]=Weiner_filter_right(FTobject,U,V,A,alpha,Otf,Kotf,K,fvector,m_est,W,u,v,wo)
+
+Noisespectrum=FTobject.*W;
+NoisePower = sum(sum(abs(Noisespectrum).^2))./sum(sum(W));
+Otfpower=abs(Otf).^2;
+
+K=sqrt(U.^2+V.^2);
+shifted_K=sqrt((U-fvector(1)).^2 + (V-fvector(2)).^2);
+k_mag=sqrt(fvector(1)^2 + fvector(2)^2);
+OBJamp = m_est.*A.*(shifted_K).^(-alpha);
+OBJpower= abs(OBJamp).^2;
+T1= (conj(Otf)./NoisePower);
+T2= Otfpower./NoisePower;
+T3= 1./OBJpower;
+Filter= T1./(T2+T3);
+WF_FTobject= Filter.*FTobject.*(1/m_est);
+end
+function m_est=Modulation_Estimation(FTobject,U,V,fvector,phvector,Otf,Kotf,A,alpha,u,v,W)
+w = size(Otf);
+wo = w/2;
+K=sqrt(U.^2+V.^2);
+shifted_K=sqrt((U-fvector(1)).^2 + (V-fvector(2)).^2);
+k_mag=sqrt(fvector(1)^2 + fvector(2)^2);
+OBJamp = A.*(shifted_K).^(-alpha);
+Sigamp =OBJamp.*Otf;
+nNoise = FTobject.*W;
+NoisePower = sum(sum( nNoise.*conj(nNoise) ))./sum(sum(W));
+Fpower = FTobject.*conj(FTobject) - NoisePower;
+fDp = sqrt(abs(Fpower));
+Zmask = (K > 0.2*k_mag).*(K < 0.8*k_mag);
+Mm = sum(sum(Sigamp.*abs(fDp).*Zmask));
+Mm = Mm./sum(sum(Sigamp.^2.*Zmask));
+m_est=Mm;
+end
+function [WF_AF1,Noise_AF1]=Weiner_filter_center(AF1,U,V,A,alpha,Otf,Kotf,K,fvecA,phaseA,W)
+Noisespectrum=AF1.*W;
+NoisePower = sum(sum(abs(Noisespectrum).^2))./sum(sum(W));
+Otfpower=abs(Otf).^2;
+OBJamp= A.*abs(K).^(-alpha);
+OBJpower= OBJamp.^2;
+T1= (conj(Otf)./NoisePower);
+T2= Otfpower./NoisePower;
+T3= 1./OBJpower;
+Filter= T1./(T2+T3);
+WF_AF1= Filter.*AF1;
+Noise_AF1=NoisePower;
+end
+function [Obj1,Obj2]=Object_Para_Estimation(NoisySkHk,Otf,Kotf,U,V,W)
 K=sqrt(U.^2+V.^2);
 CC=(K>0.3*Kotf).*(K<0.4*Kotf);
 NSK=NoisySkHk.*CC;
 A = sum(sum(abs(NSK)))./sum(sum(CC));
 alpha = -0.5;
 OBJparam = [A alpha];
-Objparaopt=@(OBJparam)Objoptfunc(OBJparam,NoisySkHk,Kotf,U,V,K,Otf,CC)
+Objparaopt=@(OBJparam)Objoptfunc(OBJparam,NoisySkHk,Kotf,U,V,K,Otf,CC,W)
 options = optimset('LargeScale','off','Algorithm','active-set','MaxFunEvals',500,'MaxIter',500,'Display','notify');
 [Objpara,fval]=fminsearch(Objparaopt,OBJparam,options);
 Obj1=Objpara(1);
-Obj2= Objpara(2);
+Obj2=-Objpara(2);
 end
-function C= Objoptfunc(OBJparam,NoisySkHk,Kotf,U,V,K,Otf,CC)
+function C= Objoptfunc(OBJparam,NoisySkHk,Kotf,U,V,K,Otf,CC,W)
 K(257,257)=1;
 A= OBJparam(1,1);
 alpha= OBJparam(1,2);
 Objamp=A.*(K.^(alpha));
 Signalamp=Objamp.*(abs(Otf));
-NOisef=1.5*Kotf;
-ZZ=K>NOisef;
+ZZ=W;
 Noisespectrum=NoisySkHk.*ZZ;
 NoisePower = sum(sum(abs(Noisespectrum).^2))./sum(sum(ZZ));
-Noisefreesignalamp=(abs(NoisySkHk).^2)-NoisePower;
+Noisefreesignalamp=((abs(NoisySkHk).^2))-NoisePower;
 Noisefreesignalamp=sqrt(Noisefreesignalamp);
 Error=(Noisefreesignalamp)-Signalamp;
-Zloop = (K<0.75*Kotf).*((K>0.25*Kotf));
-invK=1./K;
+Zloop = (K<0.8*Kotf).*((K>0.2*Kotf));
+invK=1./(K);
 C=sum(sum(((Error.^2.*invK).*Zloop)));
 end
 function [FC1,FC2,FC3]= separate_noisyfcomponenets(I1,I2,I3,fvector,phase,psfe)
